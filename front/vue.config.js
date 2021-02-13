@@ -1,5 +1,5 @@
 module.exports = {
-  outputDir: "../src/main/resources/static/generated",
+  outputDir: "../src/main/resources/static",
   filenameHashing: false,
   configureWebpack: {
     devServer: {
@@ -12,7 +12,7 @@ module.exports = {
     top: {
       entry: "src/top/main.ts",
       template: "../src/main/resources/templates/top.html",
-      filename: "top.html"
+      filename: "index.html"
     },
     game: {
       entry: "src/game/main.ts",

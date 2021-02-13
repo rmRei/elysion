@@ -6,10 +6,10 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<title th:text="*{title}">elysion | TOP</title>
 	<link rel="icon" type="image/png" href="/images/hand.png" />
-	<link th:href="|/generated/css/top.css?*{switchParam}|" rel="preload" as="style">
-	<link th:href="|/generated/js/top.js?*{switchParam}|" rel="preload" as="script">
-	<link th:href="|/generated/js/chunk-vendors.js?*{switchParam}|" rel="preload" as="script">
-	<link th:href="|/generated/css/top.css?*{switchParam}|" rel="stylesheet">
+	<link th:href="|/css/top.css?*{switchParam}|" rel="preload" as="style">
+	<link th:href="|/js/top.js?*{switchParam}|" rel="preload" as="script">
+	<link th:href="|/js/chunk-vendors.js?*{switchParam}|" rel="preload" as="script">
+	<link th:href="|/css/top.css?*{switchParam}|" rel="stylesheet">
 </head>
 <body>
 	<p>TOPページ</p>
@@ -17,7 +17,7 @@
 		<strong>JavaScriptが無効となっています。 続行するには有効にしてください。</strong>
 	</noscript>
 	<div id="app"></div>
-<script th:src="|/generated/js/chunk-vendors.js?*{switchParam}|"></script>
-<script th:src="|/generated/js/top.js?*{switchParam}|"></script>
+<script th:src="|/js/chunk-vendors.js?*{switchParam}|"></script>
+<script th:src="|/js/top.js?*{switchParam}|"></script>
 </body>
 </html>
