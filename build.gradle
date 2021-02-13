@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'war'
+	id "com.github.node-gradle.node" version "3.0.1"
 }
 
 group = 'com.elysion'
@@ -37,3 +38,24 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+node {
+	version = '14.15.4'
+	download = true
+}
+
+task setupFront(type: YarnTask) {
+	execOverrides {
+		it.workingDir = './front'
+	}
+	args = ['install']
+}
+task buildFront(type: YarnTask) {
+	execOverrides {
+		it.workingDir = './front'
+	}
+	args = ['build']
+}
+
+buildFront.dependsOn setupFront
+compileJava.dependsOn buildFront

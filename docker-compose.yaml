@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./front:/elysion/front
+      - ./src/main/resources:/elysion/src/main/resources
+    working_dir: /elysion/front
+    command: sh -c 'yarn install; yarn serve -- --port 4000'
+    tty: true
+    ports:
+      - 4000:4000
