@@ -1,10 +1,11 @@
 <template>
   <div class="sidemenu">
-    <Menu /><div v-on:click="toggleHidden"></div>
+    <Menu />
+    <div v-on:click="toggleHidden"></div>
   </div>
   <div class="contents">
     <Chat v-if="isHidden" placeholder="入力欄" />
-    <Chat v-else placeholder="隠し部屋" />
+    <Chat v-else placeholder="隠し部屋e" />
   </div>
 </template>
 
@@ -22,7 +23,7 @@ export default defineComponent({
   data() {
     return {
       isHidden: true
-    }
+    };
   },
   methods: {
     toggleHidden() {

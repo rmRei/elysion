@@ -1,4 +1,5 @@
-<template><button class="clear" v-on:click="clearText">クリア</button>
+<template
+  ><button class="clear" v-on:click="clearText">クリア</button>
   <textarea rows="15" :placeholder="placeholder" v-model="text"></textarea>
   <div class="textarea">{{ text }}</div>
 </template>
