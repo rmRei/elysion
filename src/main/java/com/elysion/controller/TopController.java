@@ -10,7 +10,7 @@ public class TopController {
 	@RequestMapping(value = "/")
 	public String init(Model model) {
 
-		model.addAttribute("title", "elysion | TOP");
+		model.addAttribute("title", "Elysion | TOP");
 
 		return "top.html";
 	}

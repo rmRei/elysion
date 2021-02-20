@@ -1,26 +1,50 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="sidemenu">
+    <Menu /><div v-on:click="toggleHidden"></div>
+  </div>
+  <div class="contents">
+    <Chat v-if="isHidden" placeholder="入力欄" />
+    <Chat v-else placeholder="隠し部屋" />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "../components/HelloWorld.vue";
+import Menu from "../components/Menu.vue";
+import Chat from "../components/Chat.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld
+    Menu,
+    Chat
+  },
+  data() {
+    return {
+      isHidden: true
+    }
+  },
+  methods: {
+    toggleHidden() {
+      this.isHidden = !this.isHidden;
+    }
   }
 });
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: auto;
+  height: 100vh;
+  display: flex;
+}
+.sidemenu {
+  width: 20%;
+  height: 100vh;
+  background-color: #111111;
+}
+.contents {
+  width: 80%;
+  overflow: hidden;
 }
 </style>

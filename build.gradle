@@ -1,9 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id 'war'
-	id "com.github.node-gradle.node" version "3.0.1"
+  id 'org.springframework.boot' version '2.4.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'java'
+  id 'war'
+  id "com.github.node-gradle.node" version "3.0.1"
 }
 
 group = 'com.elysion'
@@ -11,50 +11,50 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  compileOnly 'org.projectlombok:lombok'
+  runtimeOnly 'org.postgresql:postgresql'
+  annotationProcessor 'org.projectlombok:lombok'
+  providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
 
 node {
-	version = '14.15.4'
-	download = true
+  version = '14.15.4'
+  download = true
 }
 
 task setupFront(type: YarnTask) {
-	execOverrides {
-		it.workingDir = './front'
-	}
-	args = ['install']
+  execOverrides {
+    it.workingDir = './front'
+  }
+  args = ['install']
 }
 task buildFront(type: YarnTask) {
-	execOverrides {
-		it.workingDir = './front'
-	}
-	args = ['build']
+  execOverrides {
+    it.workingDir = './front'
+  }
+  args = ['build']
 }
 
 buildFront.dependsOn setupFront
