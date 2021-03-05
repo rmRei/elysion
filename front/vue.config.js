@@ -16,6 +16,7 @@ module.exports = {
     },
     game: {
       entry: "src/game/main.ts",
+      template: "../src/main/resources/templates/game.html",
       filename: "game.html"
     }
   }

@@ -1,10 +1,5 @@
 <template>
-  <a
-    :href="menu.href"
-    class="button menu"
-    v-for="menu in menuList"
-    :key="menu.text"
-  >
+  <a :href="menu.href" class="button menu" v-for="menu in menuList" :key="menu">
     <img
       class="menu"
       :src="[menu.image == '' ? '/images/hand.png' : menu.image]"
@@ -13,21 +8,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import axios from "axios";
 
 export default defineComponent({
   name: "Menu",
-  data() {
-    return {
-      menuList: []
-    };
-  },
-  created() {
+  setup() {
+    const menuList = ref([]);
+
     axios
       .get("/master/MenuList.json")
-      .then(response => (this.menuList = response.data))
+      .then(response => (menuList.value = response.data))
       .catch(error => console.log(error));
+
+    return {
+      menuList
+    };
   }
 });
 </script>
@@ -41,7 +37,7 @@ a.menu {
 img.menu {
   width: 15px;
   height: 15px;
-  margin-left: -50px;
-  margin-right: 25px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 </style>

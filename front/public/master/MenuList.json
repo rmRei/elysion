@@ -3,5 +3,10 @@
     "text": "TOPへ",
     "href": "/",
     "image": "/images/hand.png"
+  },
+  {
+    "text": "ゲーム",
+    "href": "/game",
+    "image": ""
   }
 ]
