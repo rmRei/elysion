@@ -110,11 +110,11 @@ export default defineComponent({
       } else if (level == "normal") {
         xsize.value = 20;
         ysize.value = 20;
-        bombsize.value = 60;
+        bombsize.value = 80;
       } else if (level == "hard") {
-        xsize.value = 50;
-        ysize.value = 50;
-        bombsize.value = 500;
+        xsize.value = 30;
+        ysize.value = 30;
+        bombsize.value = 225;
       }
       createMap();
     };
@@ -155,7 +155,7 @@ export default defineComponent({
         return;
       }
 
-      if (cell.opened || cell.contents == FLAG || isLose.value) {
+      if (cell.opened || cell.contents == FLAG || isLose.value || isCompleted) {
         return;
       }
 
@@ -291,8 +291,8 @@ export default defineComponent({
   font-size: 2vmin;
 }
 .hard .cell {
-  width: 2%;
-  font-size: 1vmin;
+  width: 3.333%;
+  font-size: 1.5vmin;
 }
 .easy .row:before {
   padding-top: 10%;
@@ -301,6 +301,6 @@ export default defineComponent({
   padding-top: 5%;
 }
 .hard .row:before {
-  padding-top: 2%;
+  padding-top: 3.333%;
 }
 </style>
