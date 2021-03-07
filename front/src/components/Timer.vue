@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <span>
     {{ ("00" + Math.floor(timer / 60)).slice(-2) }}:{{
       ("00" + (timer % 60)).slice(-2)
     }}
-  </div>
+  </span>
 </template>
 
 <script lang="ts">

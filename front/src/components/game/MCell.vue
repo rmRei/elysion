@@ -1,6 +1,6 @@
 <template>
-  <div class="cell" :class="{ opened: cell.opened }">
-    {{ isLose && cell.hasBomb ? bomb : cell.contents }}
+  <div class="mcell" :class="{ opened: cell.isOpened }">
+    {{ isLost && cell.hasBomb ? bomb : cell.contents }}
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "MCell",
   props: {
-    isLose: Boolean,
+    isLost: Boolean,
     bomb: String,
     cell: Object
   }
@@ -18,7 +18,7 @@ export default defineComponent({
 </script>
 
 <style>
-.cell {
+.mcell {
   color: #000000;
   font-weight: bold;
   display: flex;
@@ -28,7 +28,7 @@ export default defineComponent({
   background-color: #ffffff;
   border: solid #000000 1px;
 }
-.cell:hover {
+.mcell:hover {
   background-color: #999999;
   border: solid #999999 1px;
 }

@@ -1,28 +1,31 @@
 <template>
-  <div class="minesweeper">
-    <span class="bombcount">{{ BOMB + "：" + (bombsize - flagsize) }}</span>
-    <span v-on:click="init">Elysion</span>
-    <img
-      v-on:click="toggleHidden"
-      class="config"
-      :src="[isShow ? '/images/cross.png' : '/images/gear.png']"
-    />
-    <Timer ref="timer" />
-    <div :class="level" v-show="!isShowConfig">
-      <div v-for="row in map" :key="row" class="row">
+  <div class="minesweeper center">
+    <div class="header">
+      <span class="left">{{ BOMB + "：" + (bombsize - flagCount) }}</span>
+      <div class="center"><Timer ref="timer" /></div>
+      <div class="config">
+        <img src="/images/reload.png" v-if="isStarted" v-on:click="init" />
+        <img
+          :src="[shownConfig ? '/images/cross.png' : '/images/gear.png']"
+          v-on:click="toggleShownConfig"
+        />
+      </div>
+    </div>
+    <div :class="level" v-show="!shownConfig">
+      <div class="row" v-for="row in map" :key="row">
         <MCell
-          :isLose="isLose"
+          :isLost="isLost"
           :bomb="BOMB"
-          :cell="cell"
           v-for="cell in row"
           :key="cell"
+          :cell="cell"
           v-on:click="open(cell)"
           v-on:click.right.prevent="check(cell)"
         />
       </div>
     </div>
-    <div v-show="isShowConfig" class="selectWindow">
-      <SelectButton v-on:result="selectLevel" :optionList="levelList" />
+    <div class="selectlevel" v-show="shownConfig">
+      <SelectButton v-on:result="selectLevel" :optionList="LEVEL_LIST" />
     </div>
   </div>
 </template>
@@ -33,6 +36,7 @@ import MCell from "./MCell.vue";
 import Timer from "../Timer.vue";
 import SelectButton from "../SelectButton.vue";
 
+const LEVEL_LIST = ["easy", "normal", "hard"];
 const FLAG = "🚩";
 const BOMB = "💣";
 
@@ -40,13 +44,13 @@ class Cell {
   x: number;
   y: number;
   hasBomb: boolean;
-  opened: boolean;
+  isOpened: boolean;
   contents: string;
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
     this.hasBomb = false;
-    this.opened = false;
+    this.isOpened = false;
     this.contents = "";
   }
 }
@@ -59,84 +63,87 @@ export default defineComponent({
     SelectButton
   },
   setup() {
-    let isStarted = false;
-    let mapsize = 0;
-    let openedsize = 0;
+    let openedCount = 0;
     let isCompleted = false;
-    const isShowConfig = ref(false);
-    const levelList = ref(["easy", "normal", "hard"]);
-    const level = ref(levelList.value[0]);
-    const isLose = ref(false);
-    const xsize = ref(10);
-    const ysize = ref(10);
+    let xsize = 10;
+    let ysize = 10;
+    const shownConfig = ref(false);
+    const level = ref(LEVEL_LIST[0]);
+    const isStarted = ref(false);
+    const isLost = ref(false);
     const bombsize = ref(10);
-    const flagsize = ref(0);
+    const flagCount = ref(0);
     const map = ref();
 
     const timer = ref();
 
     const createMap = () => {
-      const noBombField = [];
-      for (let y = 0; y < ysize.value; y++) {
+      const noBombMap = [];
+      for (let y = 0; y < ysize; y++) {
         const row = [];
-        for (let x = 0; x < xsize.value; x++) {
+        for (let x = 0; x < xsize; x++) {
           row.push(new Cell(x, y));
-          noBombField.push({ x, y });
+          noBombMap.push({ x, y });
         }
         map.value.push(row);
       }
-      mapsize = noBombField.length;
       for (let bomb = 0; bomb < bombsize.value; bomb++) {
-        const index = Math.floor(Math.random() * noBombField.length);
-        const field = noBombField[index];
-        noBombField.splice(index, 1);
-        map.value[field.y][field.x].hasBomb = true;
+        const index = Math.floor(Math.random() * noBombMap.length);
+        const cell = noBombMap[index];
+        map.value[cell.y][cell.x].hasBomb = true;
+        noBombMap.splice(index, 1);
       }
     };
 
-    const init = (level: string) => {
+    const init = () => {
       timer.value.stop();
       timer.value.reset();
       map.value = [];
-      flagsize.value = 0;
-      isLose.value = false;
-      isStarted = false;
-      openedsize = 0;
+      openedCount = 0;
+      flagCount.value = 0;
       isCompleted = false;
-      if (level == "easy") {
-        xsize.value = 10;
-        ysize.value = 10;
-        bombsize.value = 10;
-      } else if (level == "normal") {
-        xsize.value = 20;
-        ysize.value = 20;
-        bombsize.value = 80;
-      } else if (level == "hard") {
-        xsize.value = 30;
-        ysize.value = 30;
-        bombsize.value = 225;
-      }
+      isStarted.value = false;
+      isLost.value = false;
+
       createMap();
     };
 
-    const toggleHidden = () => {
-      isShowConfig.value = !isShowConfig.value;
+    const toggleShownConfig = () => {
+      shownConfig.value = !shownConfig.value;
     };
 
     const selectLevel = (result: string) => {
       level.value = result;
-      toggleHidden();
-      timer.value.stop();
-      timer.value.reset();
-      init(level.value);
+
+      switch (level.value) {
+        case LEVEL_LIST[0]:
+          xsize = 10;
+          ysize = 10;
+          bombsize.value = 10;
+          break;
+        case LEVEL_LIST[1]:
+          xsize = 20;
+          ysize = 20;
+          bombsize.value = 80;
+          break;
+        case LEVEL_LIST[2]:
+          xsize = 30;
+          ysize = 30;
+          bombsize.value = 225;
+          break;
+        default:
+      }
+
+      toggleShownConfig();
+      init();
     };
 
     const getNeighbours = (cell: Cell) => {
       const list = [];
       const minX = Math.max(0, cell.x - 1);
-      const maxX = Math.min(xsize.value - 1, cell.x + 1);
+      const maxX = Math.min(xsize - 1, cell.x + 1);
       const minY = Math.max(0, cell.y - 1);
-      const maxY = Math.min(ysize.value - 1, cell.y + 1);
+      const maxY = Math.min(ysize - 1, cell.y + 1);
       for (let x = minX; x <= maxX; x++) {
         for (let y = minY; y <= maxY; y++) {
           if (x != cell.x || y != cell.y) {
@@ -148,19 +155,24 @@ export default defineComponent({
     };
 
     const open = (cell: Cell) => {
-      if (!isStarted && cell.hasBomb) {
-        init(level.value);
-        open(map.value[cell.y][cell.x]);
-
-        return;
-      }
-
-      if (cell.opened || cell.contents == FLAG || isLose.value || isCompleted) {
+      if (
+        cell.isOpened ||
+        cell.contents == FLAG ||
+        isLost.value ||
+        isCompleted
+      ) {
         return;
       }
 
       if (cell.hasBomb) {
-        isLose.value = true;
+        if (!isStarted.value) {
+          init();
+          open(map.value[cell.y][cell.x]);
+
+          return;
+        }
+
+        isLost.value = true;
         timer.value.stop();
         return;
       } else {
@@ -171,35 +183,37 @@ export default defineComponent({
             neighboursBombsize++;
           }
         });
-        if (!isStarted && neighboursBombsize != 0) {
-          init(level.value);
-          open(map.value[cell.y][cell.x]);
+        if (!isStarted.value) {
+          if (neighboursBombsize != 0) {
+            init();
+            open(map.value[cell.y][cell.x]);
 
-          return;
+            return;
+          } else {
+            timer.value.start();
+            isStarted.value = true;
+          }
         }
 
-        cell.opened = true;
-        openedsize++;
-
-        if (!isStarted) {
-          timer.value.start();
-          isStarted = true;
-        }
+        cell.isOpened = true;
 
         if (neighboursBombsize == 0) {
           neighbours.forEach((neighbour: Cell) => {
-            if (!neighbour.opened && neighbour.contents != FLAG) {
+            if (!neighbour.isOpened && neighbour.contents != FLAG) {
               open(neighbour);
             }
           });
         } else {
           cell.contents = neighboursBombsize.toString();
         }
-        if (mapsize == openedsize + bombsize.value && !isCompleted) {
+
+        openedCount++;
+
+        if (xsize * ysize == openedCount + bombsize.value) {
           timer.value.stop();
           isCompleted = true;
           alert(
-            "クリアおめでとう\r\nタイム：" +
+            "おめでとう\r\nクリアタイム：" +
               Math.floor(timer.value.timer / 60) +
               "分" +
               (timer.value.timer % 60) +
@@ -210,38 +224,37 @@ export default defineComponent({
     };
 
     const check = (cell: Cell) => {
-      if (cell.opened || isLose.value) {
+      if (cell.isOpened || isLost.value) {
         return;
       }
 
       if (cell.contents == FLAG) {
         cell.contents = "";
-        flagsize.value--;
+        flagCount.value--;
       } else {
         cell.contents = FLAG;
-        flagsize.value++;
+        flagCount.value++;
       }
     };
 
     onMounted(() => {
-      init(level.value);
+      init();
     });
 
     return {
+      LEVEL_LIST,
       BOMB,
-      isShowConfig,
-      levelList,
+      shownConfig,
       level,
-      isLose,
-      xsize,
-      ysize,
+      isStarted,
+      isLost,
       bombsize,
-      flagsize,
       map,
+      flagCount,
       timer,
-      init,
-      toggleHidden,
+      toggleShownConfig,
       selectLevel,
+      init,
       open,
       check
     };
@@ -253,46 +266,37 @@ export default defineComponent({
 .minesweeper {
   position: relative;
   max-width: 90vmin;
-  width: 80%;
-  height: fit-content;
   border: solid;
-  top: 0.5em;
-  margin: auto;
   text-align: center;
 }
-.bombcount {
+.minesweeper .header {
+  font-size: 3vmin;
+  height: 5vmin;
+}
+.minesweeper .header .left {
   position: absolute;
-  top: 10px;
   left: 10px;
 }
-.config {
+.minesweeper .config {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  height: 30px;
+  right: 0;
+  top: 0;
 }
-.selectWindow > button {
+.minesweeper .config img {
+  height: 3vmin;
+  vertical-align: top;
+  margin: 1vmin;
+}
+.minesweeper .selectlevel button {
   width: 30%;
   margin: 1%;
   font-size: 1em;
 }
-.row:before {
+.minesweeper .row:before {
   content: "";
 }
-.row {
+.minesweeper .row {
   display: flex;
-}
-.easy .cell {
-  width: 10%;
-  font-size: 4vmin;
-}
-.normal .cell {
-  width: 5%;
-  font-size: 2vmin;
-}
-.hard .cell {
-  width: 3.333%;
-  font-size: 1.5vmin;
 }
 .easy .row:before {
   padding-top: 10%;
@@ -302,5 +306,17 @@ export default defineComponent({
 }
 .hard .row:before {
   padding-top: 3.333%;
+}
+.easy .mcell {
+  width: 10%;
+  font-size: 4vmin;
+}
+.normal .mcell {
+  width: 5%;
+  font-size: 2vmin;
+}
+.hard .mcell {
+  width: 3.333%;
+  font-size: 1.5vmin;
 }
 </style>

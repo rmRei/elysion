@@ -23,8 +23,6 @@ export default defineComponent({
 
 <style>
 #app {
-  width: auto;
-  height: 100vh;
   display: flex;
   overflow: hidden;
   font-size: x-large;
@@ -33,6 +31,10 @@ export default defineComponent({
   width: 20%;
   height: 100vh;
   background-color: #111111;
+}
+.sidemenu a.menu {
+  height: 5vh;
+  line-height: 5vh;
 }
 .contents {
   width: 80%;

@@ -11,13 +11,11 @@ module.exports = {
   pages: {
     top: {
       entry: "src/top/main.ts",
-      template: "../src/main/resources/templates/top.html",
-      filename: "index.html"
+      template: "../src/main/resources/templates/top.html"
     },
     game: {
       entry: "src/game/main.ts",
-      template: "../src/main/resources/templates/game.html",
-      filename: "game.html"
+      template: "../src/main/resources/templates/game.html"
     }
   }
 };

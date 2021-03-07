@@ -2,11 +2,11 @@
   {
     "text": "TOPへ",
     "href": "/",
-    "image": "/images/hand.png"
+    "image": "/images/home.png"
   },
   {
     "text": "ゲーム",
     "href": "/game",
-    "image": ""
+    "image": "/images/game.png"
   }
 ]

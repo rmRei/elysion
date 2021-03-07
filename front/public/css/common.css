@@ -30,3 +30,6 @@ button {
 button:hover {
   background-color: #330000;
 }
+.center {
+	margin: auto;
+}
